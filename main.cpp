@@ -75,6 +75,10 @@ typedef R<Id, S<LimitedDecrement, U<3, 3>>> LimitedSub; // TODO
  */
 
 typedef Z Less; // TODO
+/*
+ *
+ */
+
 typedef Z BitAnd; // TODO, в рекурсии берём остаток от деления на два и делаем коньюнкцию
 typedef Z BitXor; // TODO, так же, как и выше
 typedef Z First; // TODO, ???
