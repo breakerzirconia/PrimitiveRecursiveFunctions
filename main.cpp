@@ -59,15 +59,29 @@ typedef R<One, S<Product, U<3, 1>, U<3, 3>>> Power;
  * Similar to Product
  */
 
-typedef Z LimitedMinus;//не сделано
-typedef Z Less;//не сделано
-typedef Z BitAnd;// не сделано, в рекурсии берём остаток от деления на два и делаем коньюнкцию
-typedef Z BitXor;//не сделано, так же, как и выше
-typedef Z First;//не сделано, ???
-typedef Z Div;//не сделано, нужен Less
-typedef Z Mod;//не сделано, нужен Less и LimitedMinus
-typedef Z Plog;// не сделано
-typedef R<One, S<Product, U<3, 1>, U<3, 2>>> Factorial;//не сделано
+typedef R<Id, S<LimitedDecrement, U<3, 3>>> LimitedSub; // TODO
+/*
+ * R<Id, LD3AR3rd>(8, 3)
+ * LD3AR3rd(8, 2, R<Id, LD3AR3rd>(8, 2))
+ * LD3AR3rd(8, 2, LD3AR3rd(8, 1, R<Id, LD3AR3rd>(8, 1)))
+ * LD3AR3rd(8, 2, LD3AR3rd(8, 1, LD3AR3rd(8, 0, R<Id, LD3AR3rd>(8, 0))))
+ * LD3AR3rd(8, 2, LD3AR3rd(8, 1, LD3AR3rd(8, 0, Id(8))))
+ * LD3AR3rd(8, 2, LD3AR3rd(8, 1, LD3AR3rd(8, 0, 8)))
+ * LD3AR3rd(8, 2, LD3AR3rd(8, 1, 7))
+ * LD3AR3rd(8, 2, 6)
+ * 5
+ *
+ * the case when a < b is analogous
+ */
+
+typedef Z Less; // TODO
+typedef Z BitAnd; // TODO, в рекурсии берём остаток от деления на два и делаем коньюнкцию
+typedef Z BitXor; // TODO, так же, как и выше
+typedef Z First; // TODO, ???
+typedef Z Div; // TODO, нужен Less
+typedef Z Mod; // TODO, нужен Less и LimitedSub
+typedef Z Plog; // TODO
+typedef R<One, S<Product, U<3, 1>, U<3, 2>>> Factorial; // TODO
 
 template<typename P>
 void printPRF(P prf, const NatArgs& args) {
@@ -82,5 +96,8 @@ int main() {
     printPRF(LimitedDecrement(), NatArgs{12});
     printPRF(LimitedDecrement(), NatArgs{1});
     printPRF(LimitedDecrement(), NatArgs{0});
+    printPRF(LimitedSub(), NatArgs{8, 6});
+    printPRF(LimitedSub(), NatArgs{8, 8});
+    printPRF(LimitedSub(), NatArgs{6, 8});
     return 0;
 }
