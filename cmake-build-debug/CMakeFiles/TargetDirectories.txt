@@ -1,0 +1,3 @@
+D:/JetBrainsIDEsProjects/CLionProjects/FOURTH_SEMESTER/MathLogicHW7/cmake-build-debug/CMakeFiles/MathLogicHW7.dir
+D:/JetBrainsIDEsProjects/CLionProjects/FOURTH_SEMESTER/MathLogicHW7/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/JetBrainsIDEsProjects/CLionProjects/FOURTH_SEMESTER/MathLogicHW7/cmake-build-debug/CMakeFiles/rebuild_cache.dir
