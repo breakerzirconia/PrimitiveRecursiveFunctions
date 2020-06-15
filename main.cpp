@@ -40,7 +40,20 @@ typedef R<Z, S<Sum, U<3, 1>, U<3, 3>>> Product;
  * 8
  */
 
-typedef R<Z, U<3, 2>> LimitedMinusOne;//работает только от двух аргументов
+typedef S<R<Z, U<3, 2>>, Id, Id> LimitedDecrement;
+/*
+ * S<R<Z, U<3, 2>>, Id, Id>(3)
+ * R<Z, U<3, 2>>(Id(3), Id(3))
+ * R<Z, U<3, 2>>(3, 3)
+ * U<3, 2>(3, 2, R<Z, U<3, 2>>(3, 2))
+ * U<3, 2>(3, 2, U<3, 2>(3, 1, R<Z, U<3, 2>>(3, 1)))
+ * U<3, 2>(3, 2, U<3, 2>(3, 1, U<3, 2>(3, 0, R<Z, U<3, 2>>(3, 0))))
+ * U<3, 2>(3, 2, U<3, 2>(3, 1, U<3, 2>(3, 0, 0)))
+ * U<3, 2>(3, 2, U<3, 2>(3, 1, 0))
+ * U<3, 2>(3, 2, 1)
+ * 2
+ */
+
 typedef Z LimitedMinus;//не сделано
 typedef Z Less;//не сделано
 typedef Z BitAnd;// не сделано, в рекурсии берём остаток от деления на два и делаем коньюнкцию
@@ -49,10 +62,6 @@ typedef Z First;//не сделано, ???
 typedef Z Div;//не сделано, нужен Less
 typedef Z Mod;//не сделано, нужен Less и LimitedMinus
 typedef R<One, S<Product, U<3, 1>, U<3, 3>>> Power;
-/*
- * a ^^ b = { a ^ a ^ a ^ ... ^ a } b times
- */
-
 typedef Z Plog;// не сделано
 typedef R<One, S<Product, U<3, 1>, U<3, 2>>> Factorial;//не сделано
 
@@ -65,5 +74,9 @@ int main() {
     printPRF(Sum(), NatArgs{13, 12});
     printPRF(Product(), NatArgs{13, 12});
     printPRF(Power(), NatArgs{3, 6});
+    printPRF(LimitedDecrement(), NatArgs{134});
+    printPRF(LimitedDecrement(), NatArgs{12});
+    printPRF(LimitedDecrement(), NatArgs{1});
+    printPRF(LimitedDecrement(), NatArgs{0});
     return 0;
 }
