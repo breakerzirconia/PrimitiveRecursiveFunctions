@@ -54,6 +54,11 @@ typedef S<R<Z, U<3, 2>>, Id, Id> LimitedDecrement;
  * 2
  */
 
+typedef R<One, S<Product, U<3, 1>, U<3, 3>>> Power;
+/*
+ * Similar to Product
+ */
+
 typedef Z LimitedMinus;//не сделано
 typedef Z Less;//не сделано
 typedef Z BitAnd;// не сделано, в рекурсии берём остаток от деления на два и делаем коньюнкцию
@@ -61,7 +66,6 @@ typedef Z BitXor;//не сделано, так же, как и выше
 typedef Z First;//не сделано, ???
 typedef Z Div;//не сделано, нужен Less
 typedef Z Mod;//не сделано, нужен Less и LimitedMinus
-typedef R<One, S<Product, U<3, 1>, U<3, 3>>> Power;
 typedef Z Plog;// не сделано
 typedef R<One, S<Product, U<3, 1>, U<3, 2>>> Factorial;//не сделано
 
