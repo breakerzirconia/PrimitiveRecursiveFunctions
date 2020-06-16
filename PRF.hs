@@ -1,3 +1,5 @@
+{-# LANGUAGE Strict #-}
+
 module PRF
     ( PRF(..)
     , compute
@@ -9,6 +11,8 @@ module PRF
     , prfPower
     , prfLimitedDecrement
     , prfLimitedSub
+    , prfLess
+    , prfFactorial
     ) where
 
 data PRF
@@ -69,6 +73,7 @@ prfLimitedDecrement = C (R Z (P 3 2)) [self, self]
 prfLimitedSub = R self (C prfLimitedDecrement [P 3 3])
 prfFalseLess = C (R one (C Z [P 3 1])) [P 2 1, prfLimitedSub] -- incorrect
 prfLess = C (R one (C Z [P 3 1])) [P 2 1, C prfLimitedSub [C S [P 2 1], P 2 2]]
+prfFactorial = C (R one (C prfProduct [C S [P 3 2], P 3 3])) [self, self]
 
 printPRF :: PRF -> [Integer] -> IO ()
 printPRF prf args = print $ prf `compute` args
@@ -89,3 +94,6 @@ main = do
     printPRF prfLess [43, 12]
     printPRF prfLess [12, 12]
     printPRF prfLess [11, 12]
+    printPRF prfFactorial [0]
+    printPRF prfFactorial [1]
+    printPRF prfFactorial [7]

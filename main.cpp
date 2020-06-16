@@ -96,13 +96,34 @@ using FalseLess = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>;
 using Less = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, S<LimitedSub, S<N, U<2, 1>>, U<2, 2>>>;
 // the correct implementation
 
-using BitAnd = Z; // TODO, в рекурсии берём остаток от деления на два и делаем коньюнкцию
-using BitXor = Z; // TODO, так же, как и выше
-using First = Z; // TODO, ???
-using Div = Z; // TODO, нужен Less
-using Mod = Z; // TODO, нужен Less и LimitedSub
+using Factorial = S<R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>, Id, Id>;
+/*
+ * S<R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>, Id, Id>(3)
+ * R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>(3, 3)
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>(3, 2))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 1, R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>(3, 1)))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 1, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 0, R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>(3, 0))))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 1, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 0, One(3))))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 1, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 0, 1)))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 1, Product(S<N, U<3, 2>>(3, 0, 1), U<3, 3>(3, 0, 1))))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 1, Product(1, 1))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 1, 1))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, Product(S<N, U<3, 2>>(3, 1, 1), U<3, 3>(3, 1, 1)))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, Product(2, 1))
+ * S<Product, S<N, U<3, 2>>, U<3, 3>>(3, 2, 2)
+ * Product(3, 2)
+ * 6
+ */
+
+using Div = Z; // TODO
+using BitAnd = Z; // TODO
+using BitXor = Z; // TODO
+using First = Z; // TODO
+using Mod = Z; // TODO
 using Plog = Z; // TODO
-using Factorial = R<One, S<Product, U<3, 1>, U<3, 2>>>; // TODO
+using Pair = Z; // TODO
+using IsPrime = Z; // TODO
+using NthPrime = Z; // TODO
 
 template<typename P>
 void printPRF([[maybe_unused]] P prf, const NatArgs& args) {
@@ -123,5 +144,8 @@ int main() {
     printPRF(Less(), NatArgs{43, 12});
     printPRF(Less(), NatArgs{12, 12});
     printPRF(Less(), NatArgs{11, 12});
+    printPRF(Factorial(), NatArgs{0});
+    printPRF(Factorial(), NatArgs{1});
+    printPRF(Factorial(), NatArgs{7});
     return 0;
 }
