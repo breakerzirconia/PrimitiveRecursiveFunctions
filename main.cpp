@@ -7,11 +7,10 @@
 
 using NatArgs = std::vector<unsigned>;
 
-typedef U<1, 1> Id;
-typedef S<N, Z> One;
-typedef S<N, One> Two;
+using Id = U<1, 1>;
+using One = S<N, Z>;
 
-typedef R<Id, S<N, U<3, 3>>> Sum;
+using Sum = R<Id, S<N, U<3, 3>>>;
 /*
  * R<U<1, 1>, S<N, U<3, 3>>>(4, 2)
  * S<N, U<3, 3>>(4, 1, R<U<1, 1>, S<N, U<3, 3>>>(4, 1))
@@ -26,7 +25,7 @@ typedef R<Id, S<N, U<3, 3>>> Sum;
  * 6
  */
 
-typedef R<Z, S<Sum, U<3, 1>, U<3, 3>>> Product;
+using Product = R<Z, S<Sum, U<3, 1>, U<3, 3>>>;
 /*
  * R<Z, S<Sum, U<3, 1>, U<3, 3>>>(4, 2)
  * S<Sum, U<3, 1>, U<3, 3>>(4, 1, R<Z, S<Sum, U<3, 1>, U<3, 3>>>(4, 1))
@@ -40,7 +39,7 @@ typedef R<Z, S<Sum, U<3, 1>, U<3, 3>>> Product;
  * 8
  */
 
-typedef S<R<Z, U<3, 2>>, Id, Id> LimitedDecrement;
+using LimitedDecrement = S<R<Z, U<3, 2>>, Id, Id>;
 /*
  * S<R<Z, U<3, 2>>, Id, Id>(3)
  * R<Z, U<3, 2>>(Id(3), Id(3))
@@ -54,12 +53,12 @@ typedef S<R<Z, U<3, 2>>, Id, Id> LimitedDecrement;
  * 2
  */
 
-typedef R<One, S<Product, U<3, 1>, U<3, 3>>> Power;
+using Power = R<One, S<Product, U<3, 1>, U<3, 3>>>;
 /*
  * Similar to Product
  */
 
-typedef R<Id, S<LimitedDecrement, U<3, 3>>> LimitedSub; // TODO
+using LimitedSub = R<Id, S<LimitedDecrement, U<3, 3>>>;
 /*
  * R<Id, LD3AR3rd>(8, 3)
  * LD3AR3rd(8, 2, R<Id, LD3AR3rd>(8, 2))
@@ -74,21 +73,39 @@ typedef R<Id, S<LimitedDecrement, U<3, 3>>> LimitedSub; // TODO
  * the case when a < b is analogous
  */
 
-typedef Z Less; // TODO
+using FalseLess = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>;
 /*
+ * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>(1, 2)
+ * R<One, S<Z, U<3, 1>>>(U<2, 1>(1, 2), LimitedSub(1, 2))
+ * R<One, S<Z, U<3, 1>>>(1, 0)
+ * S<One, Id>(1)
+ * 1 - True
  *
+ * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>(2, 2)
+ * R<One, S<Z, U<3, 1>>>(2, 0)
+ * One(2)
+ * 1 - False
+ *
+ * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>(2, 1)
+ * R<One, S<Z, U<3, 1>>>(2, 1)
+ * S<Z, U<3, 1>>(2, 0, R<One, S<Z, U<3, 1>>>(2, 0))
+ * S<Z, U<3, 1>>(2, 0, 1)
+ * 0 - True
  */
 
-typedef Z BitAnd; // TODO, в рекурсии берём остаток от деления на два и делаем коньюнкцию
-typedef Z BitXor; // TODO, так же, как и выше
-typedef Z First; // TODO, ???
-typedef Z Div; // TODO, нужен Less
-typedef Z Mod; // TODO, нужен Less и LimitedSub
-typedef Z Plog; // TODO
-typedef R<One, S<Product, U<3, 1>, U<3, 2>>> Factorial; // TODO
+using Less = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, S<LimitedSub, S<N, U<2, 1>>, U<2, 2>>>;
+// the correct implementation
+
+using BitAnd = Z; // TODO, в рекурсии берём остаток от деления на два и делаем коньюнкцию
+using BitXor = Z; // TODO, так же, как и выше
+using First = Z; // TODO, ???
+using Div = Z; // TODO, нужен FalseLess
+using Mod = Z; // TODO, нужен FalseLess и LimitedSub
+using Plog = Z; // TODO
+using Factorial = R<One, S<Product, U<3, 1>, U<3, 2>>>; // TODO
 
 template<typename P>
-void printPRF(P prf, const NatArgs& args) {
+void printPRF([[maybe_unused]] P prf, const NatArgs& args) {
     std::cout << P::compute(args) << "\n";
 }
 
@@ -103,5 +120,8 @@ int main() {
     printPRF(LimitedSub(), NatArgs{8, 6});
     printPRF(LimitedSub(), NatArgs{8, 8});
     printPRF(LimitedSub(), NatArgs{6, 8});
+    printPRF(Less(), NatArgs{43, 12});
+    printPRF(Less(), NatArgs{12, 12});
+    printPRF(Less(), NatArgs{11, 12});
     return 0;
 }
