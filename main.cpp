@@ -99,8 +99,8 @@ using Less = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, S<LimitedSub, S<N, U<2, 1>>, U<2,
 using BitAnd = Z; // TODO, в рекурсии берём остаток от деления на два и делаем коньюнкцию
 using BitXor = Z; // TODO, так же, как и выше
 using First = Z; // TODO, ???
-using Div = Z; // TODO, нужен FalseLess
-using Mod = Z; // TODO, нужен FalseLess и LimitedSub
+using Div = Z; // TODO, нужен Less
+using Mod = Z; // TODO, нужен Less и LimitedSub
 using Plog = Z; // TODO
 using Factorial = R<One, S<Product, U<3, 1>, U<3, 2>>>; // TODO
 
