@@ -83,6 +83,10 @@ prfEquals = C prfProduct [prfLessOrEquals, flip2 prfLessOrEquals]
 prfFactorial = duplicate $ R one (C prfProduct [C S [P 3 2], P 3 3])
 prfIf = R (P 2 2) (P 4 1)
 prfNot = duplicate $ R one (C Z [P 3 1])
+prfAnd = C prfIf [C one [P 2 1], C Z [P 2 1], prfProduct]
+prfOr = C prfIf [C one [P 2 1], C Z [P 2 1], prfSum]
+prfNotEquals = C prfNot [prfEquals]
+prfXor = prfNotEquals
 
 newline :: IO ()
 newline = putStrLn ""
@@ -143,3 +147,22 @@ main = do
     printPRF prfNot "Not" [23]
     printPRF prfNot "Not" [1]
     printPRF prfNot "Not" [0]
+    putStrLn $ "=== And ==="
+    printPRF prfAnd "And" [0, 0]
+    printPRF prfAnd "And" [0, 1]
+    printPRF prfAnd "And" [1, 0]
+    printPRF prfAnd "And" [1, 1]
+    putStrLn $ "=== Or ==="
+    printPRF prfOr "Or" [0, 0]
+    printPRF prfOr "Or" [0, 1]
+    printPRF prfOr "Or" [1, 0]
+    printPRF prfOr "Or" [1, 1]
+    putStrLn $ "=== NotEquals ==="
+    printPRF prfNotEquals "NotEquals" [23, 41]
+    printPRF prfNotEquals "NotEquals" [21, 43]
+    printPRF prfNotEquals "NotEquals" [32, 32]
+    putStrLn $ "=== Xor ==="
+    printPRF prfXor "Xor" [0, 0]
+    printPRF prfXor "Xor" [0, 1]
+    printPRF prfXor "Xor" [1, 0]
+    printPRF prfXor "Xor" [1, 1]

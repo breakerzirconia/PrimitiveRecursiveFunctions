@@ -9,15 +9,17 @@
 #include <vector>
 #include <cassert>
 
+using NatArgs = std::vector<unsigned>;
+
 struct Z {
-    static unsigned compute(const std::vector<unsigned>& x) {
+    static unsigned compute(const NatArgs& x) {
         assert(x.size() == 1);
         return 0;
     }
 };
 
 struct N {
-    static unsigned compute(const std::vector<unsigned>& x) {
+    static unsigned compute(const NatArgs& x) {
         assert(x.size() == 1);
         return x[0] + 1;
     }
@@ -25,7 +27,7 @@ struct N {
 
 template<unsigned n, unsigned i>
 struct U {
-    static unsigned compute(const std::vector<unsigned>& x) {
+    static unsigned compute(const NatArgs& x) {
         assert(x.size() == n);
         return x[i - 1];
     }
@@ -33,7 +35,7 @@ struct U {
 
 template<typename F, typename... G>
 struct S {
-    static unsigned compute(const std::vector<unsigned>& x) {
+    static unsigned compute(const NatArgs& x) {
         std::vector<unsigned> g;
         (g.push_back(G::compute(x)), ...);
         return F::compute(g);
@@ -42,7 +44,7 @@ struct S {
 
 template<typename F, typename G>
 struct R {
-    static unsigned compute(const std::vector<unsigned>& xy) {
+    static unsigned compute(const NatArgs& xy) {
         unsigned y = *(xy.end() - 1);
         std::vector<unsigned> xy0(xy.begin(), xy.end() - 1);
         if (y == 0) {
