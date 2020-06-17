@@ -73,7 +73,7 @@ using LimitedSub = R<Id, S<LimitedDecrement, U<3, 3>>>;
  * the case when a < b is analogous
  */
 
-using FalseLess = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>;
+using LessOrEquals = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>;//:NEW new name
 /*
  * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>(1, 2)
  * R<One, S<Z, U<3, 1>>>(U<2, 1>(1, 2), LimitedSub(1, 2))
@@ -92,9 +92,9 @@ using FalseLess = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>;
  * S<Z, U<3, 1>>(2, 0, 1)
  * 0 - True
  */
-
 using Less = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, S<LimitedSub, S<N, U<2, 1>>, U<2, 2>>>;
-// the correct implementation
+
+using Equals = S<Product, S<LessOrEquals, U<2, 1>, U<2, 2>>, S<LessOrEquals, U<2, 2>, U<2, 1>>>;//:NEW
 
 using Factorial = S<R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>, Id, Id>;
 /*
@@ -115,37 +115,40 @@ using Factorial = S<R<One, S<Product, S<N, U<3, 2>>, U<3, 3>>>, Id, Id>;
  * 6
  */
 
-using Div = Z; // TODO
+using If = S<R<U<2, 2>, U<4, 1>>, U<3, 2>, U<3, 3>, U<3, 1>>;//:NEW - возвращает третий аргумент, если первый аргумент равен нулю, иначе-возвращает второй аргумент
+using DivMax = Z;//:NEW
+using Div = S<R<Id, Id>, U<2, 1>, U<2, 2>, Z, U<2, 1>>; // TODO
+using Mod = Z; // TODO
 using BitAnd = Z; // TODO
 using BitXor = Z; // TODO
 using First = Z; // TODO
-using Mod = Z; // TODO
 using Plog = Z; // TODO
 using Pair = Z; // TODO
 using IsPrime = Z; // TODO
 using NthPrime = Z; // TODO
 
 template<typename P>
-void printPRF([[maybe_unused]] P prf, const NatArgs& args) {
+void printPRF([[maybe_unused]] P prf, const NatArgs &args) {
     std::cout << P::compute(args) << "\n";
 }
 
 int main() {
-    printPRF(Sum(), NatArgs{13, 12});
-    printPRF(Product(), NatArgs{13, 12});
-    printPRF(Power(), NatArgs{3, 6});
-    printPRF(LimitedDecrement(), NatArgs{134});
-    printPRF(LimitedDecrement(), NatArgs{12});
-    printPRF(LimitedDecrement(), NatArgs{1});
-    printPRF(LimitedDecrement(), NatArgs{0});
-    printPRF(LimitedSub(), NatArgs{8, 6});
-    printPRF(LimitedSub(), NatArgs{8, 8});
-    printPRF(LimitedSub(), NatArgs{6, 8});
-    printPRF(Less(), NatArgs{43, 12});
-    printPRF(Less(), NatArgs{12, 12});
-    printPRF(Less(), NatArgs{11, 12});
-    printPRF(Factorial(), NatArgs{0});
-    printPRF(Factorial(), NatArgs{1});
-    printPRF(Factorial(), NatArgs{7});
+//    printPRF(Sum(), NatArgs{13, 12});
+//    printPRF(Product(), NatArgs{13, 12});
+//    printPRF(Power(), NatArgs{3, 6});
+//    printPRF(LimitedDecrement(), NatArgs{134});
+//    printPRF(LimitedDecrement(), NatArgs{12});
+//    printPRF(LimitedDecrement(), NatArgs{1});
+//    printPRF(LimitedDecrement(), NatArgs{0});
+//    printPRF(LimitedSub(), NatArgs{8, 6});
+//    printPRF(LimitedSub(), NatArgs{8, 8});
+//    printPRF(LimitedSub(), NatArgs{6, 8});
+//    printPRF(Less(), NatArgs{43, 12});
+//    printPRF(Less(), NatArgs{12, 12});
+//    printPRF(Less(), NatArgs{11, 12});
+//    printPRF(Factorial(), NatArgs{0});
+//    printPRF(Factorial(), NatArgs{1});
+//    printPRF(Factorial(), NatArgs{7});
+    printPRF(If(), NatArgs{0, 3, 4});
     return 0;
 }
