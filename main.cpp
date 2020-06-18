@@ -297,9 +297,14 @@ using Div = S<R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4
 
 using Mod = S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>;
 /*
+ * Mod(a, b) = a % b
+ *
  * S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>(5, 2)
  * LimitedSub(5, Product(2, 2))
  * 1
+ * S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>(2, 5)
+ * LimitedSub(2, Product(2, 0))
+ * 2
  */
 
 using BitAnd = Z; // TODO
@@ -401,9 +406,9 @@ int main() {
     printPRF(Div(), "Div", NatArgs{5, 2});
     printPRF(Div(), "Div", NatArgs{2, 5});
     printPRF(Div(), "Div", NatArgs{5, 5});
-    printPRF(Div(), "Div", NatArgs{99, 5});
-    printPRF(Div(), "Div", NatArgs{100, 5});
-    printPRF(Div(), "Div", NatArgs{101, 5});
+    printPRF(Div(), "Div", NatArgs{49, 5});
+    printPRF(Div(), "Div", NatArgs{50, 5});
+    printPRF(Div(), "Div", NatArgs{51, 5});
     printPRF(Div(), "Div", NatArgs{0, 5});
     printPRF(Div(), "Div", NatArgs{5, 0});
     printPRF(Div(), "Div", NatArgs{0, 0});
@@ -411,9 +416,9 @@ int main() {
     printPRF(Mod(), "Mod", NatArgs{5, 2});
     printPRF(Mod(), "Mod", NatArgs{2, 5});
     printPRF(Mod(), "Mod", NatArgs{5, 5});
-    printPRF(Mod(), "Mod", NatArgs{99, 5});
-    printPRF(Mod(), "Mod", NatArgs{100, 5});
-    printPRF(Mod(), "Mod", NatArgs{101, 5});
+    printPRF(Mod(), "Mod", NatArgs{49, 5});
+    printPRF(Mod(), "Mod", NatArgs{50, 5});
+    printPRF(Mod(), "Mod", NatArgs{51, 5});
     printPRF(Mod(), "Mod", NatArgs{0, 5});
     printPRF(Mod(), "Mod", NatArgs{5, 0});
     printPRF(Mod(), "Mod", NatArgs{0, 0});
