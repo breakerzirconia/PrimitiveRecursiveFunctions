@@ -92,7 +92,7 @@ prfDivDetermine = C prfTernary [C prfLess [C prfLimitedSub [P 4 1, C prfProduct 
 prfDiv = C (R (C Z [P 2 1]) prfDivDetermine) [P 2 1, P 2 2, P 2 1]
 prfMod = C prfLimitedSub [P 2 1, C prfProduct [P 2 2, prfDiv]]
 prfIsPrime = duplicate $ R Z (C prfTernary [C prfEquals [P 3 2, C one [P 3 1]], C one [P 3 1], C prfTernary [C prfMod [P 3 1, P 3 2], C prfProduct [C one [P 3 1], P 3 3], C Z [P 3 1]]])
-hodelNil = one
+godelNil = one
 
 newline :: IO ()
 newline = putStrLn ""
