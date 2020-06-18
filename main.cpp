@@ -336,8 +336,15 @@ using Plog = Z; // TODO
 using BitAnd = Z; // TODO
 using BitXor = Z; // TODO
 using First = Z; // TODO
-using Pair = Z; // TODO
 using NthPrime = Z; // TODO
+using Pair = Z; // TODO; Pair is a bijective function: N0 x N0 -> N0
+using PairGetLeft = Z; // TODO; retrieves the left number 'a' from the Pair(a, b)
+using PairGetRight = Z; // TODO; retrieves the right number 'b' from the Pair(a, b)
+using Sqrt = Z; // TODO
+/*
+ * Idea: to keep decreasing the potential answer until it becomes less than or equal to
+ * the given number
+ */
 
 using Nil = One;
 // Gödel number of an empty list
