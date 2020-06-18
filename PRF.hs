@@ -82,11 +82,17 @@ prfLess = C (R one (C Z [P 3 1])) [P 2 1, C prfLimitedSub [C S [P 2 1], P 2 2]]
 prfEquals = C prfProduct [prfLessOrEquals, flip2 prfLessOrEquals]
 prfFactorial = duplicate $ R one (C prfProduct [C S [P 3 2], P 3 3])
 prfIf = R (P 2 2) (P 4 1)
+prfTernary = C prfIf [P 3 2, P 3 3, P 3 1]
 prfNot = duplicate $ R one (C Z [P 3 1])
 prfAnd = C prfIf [C one [P 2 1], C Z [P 2 1], prfProduct]
 prfOr = C prfIf [C one [P 2 1], C Z [P 2 1], prfSum]
 prfNotEquals = C prfNot [prfEquals]
 prfXor = prfNotEquals
+prfDivDetermine = C prfTernary [C prfLess [C prfLimitedSub [P 4 1, C prfProduct [P 4 4, P 4 2]], P 4 2], P 4 4, C S [P 4 4]]
+prfDiv = C (R (C Z [P 2 1]) prfDivDetermine) [P 2 1, P 2 2, P 2 1]
+prfMod = C prfLimitedSub [P 2 1, C prfProduct [P 2 2, prfDiv]]
+prfIsPrime = duplicate $ R Z (C prfTernary [C prfEquals [P 3 2, C one [P 3 1]], C one [P 3 1], C prfTernary [C prfMod [P 3 1, P 3 2], C prfProduct [C one [P 3 1], P 3 3], C Z [P 3 1]]])
+hodelNil = one
 
 newline :: IO ()
 newline = putStrLn ""
@@ -166,3 +172,36 @@ main = do
     printPRF prfXor "Xor" [0, 1]
     printPRF prfXor "Xor" [1, 0]
     printPRF prfXor "Xor" [1, 1]
+    putStrLn $ "=== Div ==="
+    printPRF prfDiv "Div" [5, 2]
+    printPRF prfDiv "Div" [2, 5]
+    printPRF prfDiv "Div" [5, 5]
+    printPRF prfDiv "Div" [49, 5]
+    printPRF prfDiv "Div" [50, 5]
+    printPRF prfDiv "Div" [51, 5]
+    printPRF prfDiv "Div" [0, 5]
+    printPRF prfDiv "Div" [5, 0]
+    printPRF prfDiv "Div" [0, 0]
+    printPRF prfDiv "Div" [3, 1]
+    putStrLn $ "=== Mod ==="
+    printPRF prfMod "Mod" [5, 2]
+    printPRF prfMod "Mod" [2, 5]
+    printPRF prfMod "Mod" [5, 5]
+    printPRF prfMod "Mod" [49, 5]
+    printPRF prfMod "Mod" [50, 5]
+    printPRF prfMod "Mod" [51, 5]
+    printPRF prfMod "Mod" [0, 5]
+    printPRF prfMod "Mod" [5, 0]
+    printPRF prfMod "Mod" [0, 0]
+    printPRF prfMod "Mod" [3, 1]
+    putStrLn $ "=== IsPrime ==="
+    printPRF prfIsPrime "IsPrime" [2]
+    printPRF prfIsPrime "IsPrime" [3]
+    printPRF prfIsPrime "IsPrime" [4]
+    printPRF prfIsPrime "IsPrime" [5]
+    printPRF prfIsPrime "IsPrime" [6]
+    printPRF prfIsPrime "IsPrime" [7]
+    printPRF prfIsPrime "IsPrime" [8]
+    printPRF prfIsPrime "IsPrime" [9]
+    printPRF prfIsPrime "IsPrime" [10]
+    printPRF prfIsPrime "IsPrime" [11]

@@ -245,9 +245,9 @@ using NotEquals = S<Not, Equals>;
 using Xor = NotEquals;
 // synonym to NotEquals, since its semantics mimic the latter
 
-using DivDetermine = S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>;
+using DivDetermine = S<Ternary, S<Less, S<LimitedSub, U<4, 1>, S<Product, U<4, 4>, U<4, 2>>>, U<4, 2>>, U<4, 4>, S<N, U<4, 4>>>;
 /*
- * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 0, 0, 1)
+ * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<N, U<4, 4>>>(5, 2, 0, 0)
  * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 0, 0, 1), 0, 1)
  * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 0, 0, 1), 2), 0, 1)
  * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 0, 0, 1)), 2), 0, 1)
@@ -256,7 +256,7 @@ using DivDetermine = S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4
  * Ternary(0, 0, 1)
  * 1
  *
- * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 1, 1, 1)
+ * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 1, 1)
  * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 1, 1, 1), 1, 2)
  * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 1, 1, 1), 2), 1, 2)
  * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 1, 1, 1)), 2), 1, 2)
@@ -265,7 +265,7 @@ using DivDetermine = S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4
  * Ternary(0, 1, 2)
  * 2
  *
- * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 2, 2, 1)
+ * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 2, 2)
  * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 2, 2, 1), 2, 3)
  * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 2, 2, 1), 2), 2, 3)
  * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 2, 2, 1)), 2), 2, 3)
@@ -277,21 +277,21 @@ using DivDetermine = S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4
  * etc.. same for 3, 4, 5
  */
 
-using Div = S<R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>, U<2, 1>, U<2, 2>, U<2, 1>>;
+using Div = S<R<S<Z, U<2, 1>>, DivDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>;
 /*
  * Div(a, b) = floor(a / b)
  *
- * S<R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>, U<2, 1>, U<2, 2>, U<2, 1>>(5, 2)
- * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 0) = S<Z, U<2, 1>>(5, 2) = 0
- * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 1) =
+ * S<R<S<Z, U<2, 1>>, DivDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>(5, 2)
+ * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 0) = S<Z, U<2, 1>>(5, 2) = 0
+ * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 1) =
  *     DivDetermine(5, 2, 0, 0, 1) = 1
- * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 2) =
+ * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 2) =
  *     DivDetermine(5, 2, 1, 1, 1) = 2
- * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 3) =
+ * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 3) =
  *     DivDetermine(5, 2, 2, 2, 1) = 2
- * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 4) =
+ * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 4) =
  *     DivDetermine(5, 2, 3, 2, 1) = 2
- * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 5) =
+ * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 5) =
  *     DivDetermine(5, 2, 3, 1, 1) = 2
  */
 
@@ -307,12 +307,36 @@ using Mod = S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>;
  * 2
  */
 
+using IsPrime = Duplicate<R<Z, S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>>>;
+/*
+ * IsPrime(a) = 1 if a is prime else 0
+ *
+ * R<>(3, 0) = 0
+ * R<>(3, 1) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 0, 0)
+ *           = Ternary(Equals(0, 1), 1, Ternary(Mod(3, 0), Product(1, 0), 0))
+ *           = Ternary(0, 1, Ternary(3, 0, 0))
+ *           = 0
+ * R<>(3, 2) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 1, 0)
+ *           = Ternary(Equals(1, 1), 1, Ternary(Mod(3, 1), Product(1, 0), 0))
+ *           = Ternary(1, 1, Ternary(0, 0, 0))
+ *           = 1
+ * R<>(3, 3) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 2, 1)
+ *           = Ternary(Equals(2, 1), 1, Ternary(Mod(3, 2), Product(1, 1), 0)
+ *           = Ternary(0, 1, Ternary(1, 1, 0))
+ *           = 1
+ *
+ *
+ */
+
+using Plog = Z; // TODO
+/*
+ * Idea: it takes two arguments: k, n; at each step we'll calculate k ^ n and see if n is divisible by k ^ n
+ */
+
 using BitAnd = Z; // TODO
 using BitXor = Z; // TODO
 using First = Z; // TODO
-using Plog = Z; // TODO
 using Pair = Z; // TODO
-using IsPrime = Z; // TODO
 using NthPrime = Z; // TODO
 
 using Nil = One;
@@ -412,6 +436,7 @@ int main() {
     printPRF(Div(), "Div", NatArgs{0, 5});
     printPRF(Div(), "Div", NatArgs{5, 0});
     printPRF(Div(), "Div", NatArgs{0, 0});
+    printPRF(Div(), "Div", NatArgs{3, 1});
     std::cout << "=== Mod ===" << "\n";
     printPRF(Mod(), "Mod", NatArgs{5, 2});
     printPRF(Mod(), "Mod", NatArgs{2, 5});
@@ -422,6 +447,18 @@ int main() {
     printPRF(Mod(), "Mod", NatArgs{0, 5});
     printPRF(Mod(), "Mod", NatArgs{5, 0});
     printPRF(Mod(), "Mod", NatArgs{0, 0});
+    printPRF(Mod(), "Mod", NatArgs{3, 1});
+    std::cout << "=== IsPrime ===" << "\n";
+    printPRF(IsPrime(), "IsPrime", NatArgs{2});
+    printPRF(IsPrime(), "IsPrime", NatArgs{3});
+    printPRF(IsPrime(), "IsPrime", NatArgs{4});
+    printPRF(IsPrime(), "IsPrime", NatArgs{5});
+    printPRF(IsPrime(), "IsPrime", NatArgs{6});
+    printPRF(IsPrime(), "IsPrime", NatArgs{7});
+    printPRF(IsPrime(), "IsPrime", NatArgs{8});
+    printPRF(IsPrime(), "IsPrime", NatArgs{9});
+    printPRF(IsPrime(), "IsPrime", NatArgs{10});
+    printPRF(IsPrime(), "IsPrime", NatArgs{11});
 
     return 0;
 }
