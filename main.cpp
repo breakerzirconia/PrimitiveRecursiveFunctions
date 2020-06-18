@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <string>
 #include "Primitives.h"
 
 using Id = U<1, 1>;
@@ -179,6 +180,9 @@ using If = R<U<2, 2>, U<4, 1>>;
  * 3
  */
 
+using Ternary = S<If, U<3, 2>, U<3, 3>, U<3, 1>>;
+// Ternary(c, a, b) = If(a, b, c)
+
 using Not = Duplicate<R<One, S<Z, U<3, 1>>>>;
 /*
  * Not(a) = 1 if a == 0 else 0
@@ -241,9 +245,63 @@ using NotEquals = S<Not, Equals>;
 using Xor = NotEquals;
 // synonym to NotEquals, since its semantics mimic the latter
 
-using DivMax = Z; // TODO
-using Div = S<R<Id, Id>, U<2, 1>, U<2, 2>, Z, U<2, 1>>; // TODO
-using Mod = Z; // TODO
+using DivDetermine = S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>;
+/*
+ * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 0, 0, 1)
+ * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 0, 0, 1), 0, 1)
+ * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 0, 0, 1), 2), 0, 1)
+ * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 0, 0, 1)), 2), 0, 1)
+ * Ternary(Less(LimitedSub(5, 0), 2), 0, 1)
+ * Ternary(Less(5, 2), 0, 1)
+ * Ternary(0, 0, 1)
+ * 1
+ *
+ * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 1, 1, 1)
+ * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 1, 1, 1), 1, 2)
+ * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 1, 1, 1), 2), 1, 2)
+ * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 1, 1, 1)), 2), 1, 2)
+ * Ternary(Less(LimitedSub(5, 2), 2), 1, 2)
+ * Ternary(Less(3, 2), 1, 2)
+ * Ternary(0, 1, 2)
+ * 2
+ *
+ * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 2, 2, 1)
+ * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 2, 2, 1), 2, 3)
+ * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 2, 2, 1), 2), 2, 3)
+ * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 2, 2, 1)), 2), 2, 3)
+ * Ternary(Less(LimitedSub(5, 4), 2), 2, 3)
+ * Ternary(Less(1, 2), 2, 3)
+ * Ternary(1, 2, 3)
+ * 2
+ *
+ * etc.. same for 3, 4, 5
+ */
+
+using Div = S<R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>, U<2, 1>, U<2, 2>, U<2, 1>>;
+/*
+ * Div(a, b) = floor(a / b)
+ *
+ * S<R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>, U<2, 1>, U<2, 2>, U<2, 1>>(5, 2)
+ * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 0) = S<Z, U<2, 1>>(5, 2) = 0
+ * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 1) =
+ *     DivDetermine(5, 2, 0, 0, 1) = 1
+ * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 2) =
+ *     DivDetermine(5, 2, 1, 1, 1) = 2
+ * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 3) =
+ *     DivDetermine(5, 2, 2, 2, 1) = 2
+ * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 4) =
+ *     DivDetermine(5, 2, 3, 2, 1) = 2
+ * R<S<Z, U<2, 1>>, S<DivDetermine, U<4, 1>, U<4, 2>, U<4, 3>, U<4, 4>, S<One, U<4, 1>>>>(5, 2, 5) =
+ *     DivDetermine(5, 2, 3, 1, 1) = 2
+ */
+
+using Mod = S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>;
+/*
+ * S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>(5, 2)
+ * LimitedSub(5, Product(2, 2))
+ * 1
+ */
+
 using BitAnd = Z; // TODO
 using BitXor = Z; // TODO
 using First = Z; // TODO
@@ -251,6 +309,9 @@ using Plog = Z; // TODO
 using Pair = Z; // TODO
 using IsPrime = Z; // TODO
 using NthPrime = Z; // TODO
+
+using Nil = One;
+// Gödel number of an empty list
 
 std::string listArgs(const NatArgs& args) {
     std::string result = "(";
@@ -336,6 +397,26 @@ int main() {
     printPRF(Xor(), "Xor", NatArgs{0, 1});
     printPRF(Xor(), "Xor", NatArgs{1, 0});
     printPRF(Xor(), "Xor", NatArgs{1, 1});
+    std::cout << "=== Div ===" << "\n";
+    printPRF(Div(), "Div", NatArgs{5, 2});
+    printPRF(Div(), "Div", NatArgs{2, 5});
+    printPRF(Div(), "Div", NatArgs{5, 5});
+    printPRF(Div(), "Div", NatArgs{99, 5});
+    printPRF(Div(), "Div", NatArgs{100, 5});
+    printPRF(Div(), "Div", NatArgs{101, 5});
+    printPRF(Div(), "Div", NatArgs{0, 5});
+    printPRF(Div(), "Div", NatArgs{5, 0});
+    printPRF(Div(), "Div", NatArgs{0, 0});
+    std::cout << "=== Mod ===" << "\n";
+    printPRF(Mod(), "Mod", NatArgs{5, 2});
+    printPRF(Mod(), "Mod", NatArgs{2, 5});
+    printPRF(Mod(), "Mod", NatArgs{5, 5});
+    printPRF(Mod(), "Mod", NatArgs{99, 5});
+    printPRF(Mod(), "Mod", NatArgs{100, 5});
+    printPRF(Mod(), "Mod", NatArgs{101, 5});
+    printPRF(Mod(), "Mod", NatArgs{0, 5});
+    printPRF(Mod(), "Mod", NatArgs{5, 0});
+    printPRF(Mod(), "Mod", NatArgs{0, 0});
 
     return 0;
 }
