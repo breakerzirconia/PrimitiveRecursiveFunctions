@@ -8,6 +8,7 @@
 
 using Id = U<1, 1>;
 using One = S<N, Z>;
+using Two = S<N, One>;
 
 template<typename T>
 using Flip2 = S<T, U<2, 2>, U<2, 1>>;
@@ -71,9 +72,9 @@ using Power = R<One, S<Product, U<3, 1>, U<3, 3>>>;
  * Similar to Product
  */
 
-using LimitedSub = R<Id, S<LimitedDecrement, U<3, 3>>>;
+using LimitedDifference = R<Id, S<LimitedDecrement, U<3, 3>>>;
 /*
- * LimitedSub(a, b) = 0 if a < b else a - b
+ * LimitedDifference(a, b) = 0 if a < b else a - b
  *
  * R<Id, LD3AR3rd>(8, 3)
  * LD3AR3rd(8, 2, R<Id, LD3AR3rd>(8, 2))
@@ -88,22 +89,22 @@ using LimitedSub = R<Id, S<LimitedDecrement, U<3, 3>>>;
  * the case when a < b is analogous
  */
 
-using LessOrEquals = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>;
+using LessOrEquals = S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedDifference>;
 /*
  * LessOrEquals(a, b) = 1 if a <= b else 0
  *
- * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>(1, 2)
- * R<One, S<Z, U<3, 1>>>(U<2, 1>(1, 2), LimitedSub(1, 2))
+ * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedDifference>(1, 2)
+ * R<One, S<Z, U<3, 1>>>(U<2, 1>(1, 2), LimitedDifference(1, 2))
  * R<One, S<Z, U<3, 1>>>(1, 0)
  * S<One, Id>(1)
  * 1
  *
- * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>(2, 2)
+ * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedDifference>(2, 2)
  * R<One, S<Z, U<3, 1>>>(2, 0)
  * One(2)
  * 1
  *
- * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedSub>(2, 1)
+ * S<R<One, S<Z, U<3, 1>>>, U<2, 1>, LimitedDifference>(2, 1)
  * R<One, S<Z, U<3, 1>>>(2, 1)
  * S<Z, U<3, 1>>(2, 0, R<One, S<Z, U<3, 1>>>(2, 0))
  * S<Z, U<3, 1>>(2, 0, 1)
@@ -245,31 +246,31 @@ using NotEquals = S<Not, Equals>;
 using Xor = NotEquals;
 // synonym to NotEquals, since its semantics mimic the latter
 
-using DivDetermine = S<Ternary, S<Less, S<LimitedSub, U<4, 1>, S<Product, U<4, 4>, U<4, 2>>>, U<4, 2>>, U<4, 4>, S<N, U<4, 4>>>;
+using DivDetermine = S<Ternary, S<Less, S<LimitedDifference, U<4, 1>, S<Product, U<4, 4>, U<4, 2>>>, U<4, 2>>, U<4, 4>, S<N, U<4, 4>>>;
 /*
- * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<N, U<4, 4>>>(5, 2, 0, 0)
- * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 0, 0, 1), 0, 1)
- * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 0, 0, 1), 2), 0, 1)
- * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 0, 0, 1)), 2), 0, 1)
- * Ternary(Less(LimitedSub(5, 0), 2), 0, 1)
+ * S<Ternary, S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<N, U<4, 4>>>(5, 2, 0, 0)
+ * Ternary(S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 0, 0, 1), 0, 1)
+ * Ternary(Less(S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 0, 0, 1), 2), 0, 1)
+ * Ternary(Less(LimitedDifference(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 0, 0, 1)), 2), 0, 1)
+ * Ternary(Less(LimitedDifference(5, 0), 2), 0, 1)
  * Ternary(Less(5, 2), 0, 1)
  * Ternary(0, 0, 1)
  * 1
  *
- * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 1, 1)
- * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 1, 1, 1), 1, 2)
- * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 1, 1, 1), 2), 1, 2)
- * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 1, 1, 1)), 2), 1, 2)
- * Ternary(Less(LimitedSub(5, 2), 2), 1, 2)
+ * S<Ternary, S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 1, 1)
+ * Ternary(S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 1, 1, 1), 1, 2)
+ * Ternary(Less(S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 1, 1, 1), 2), 1, 2)
+ * Ternary(Less(LimitedDifference(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 1, 1, 1)), 2), 1, 2)
+ * Ternary(Less(LimitedDifference(5, 2), 2), 1, 2)
  * Ternary(Less(3, 2), 1, 2)
  * Ternary(0, 1, 2)
  * 2
  *
- * S<Ternary, S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 2, 2)
- * Ternary(S<Less, S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 2, 2, 1), 2, 3)
- * Ternary(Less(S<LimitedSub, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 2, 2, 1), 2), 2, 3)
- * Ternary(Less(LimitedSub(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 2, 2, 1)), 2), 2, 3)
- * Ternary(Less(LimitedSub(5, 4), 2), 2, 3)
+ * S<Ternary, S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<Sum, U<5, 4>, U<5, 5>>>(5, 2, 2, 2)
+ * Ternary(S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 2, 2, 1), 2, 3)
+ * Ternary(Less(S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>(5, 2, 2, 2, 1), 2), 2, 3)
+ * Ternary(Less(LimitedDifference(5, S<Product, U<5, 4>, U<5, 2>>(5, 2, 2, 2, 1)), 2), 2, 3)
+ * Ternary(Less(LimitedDifference(5, 4), 2), 2, 3)
  * Ternary(Less(1, 2), 2, 3)
  * Ternary(1, 2, 3)
  * 2
@@ -295,15 +296,15 @@ using Div = S<R<S<Z, U<2, 1>>, DivDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>;
  *     DivDetermine(5, 2, 3, 1, 1) = 2
  */
 
-using Mod = S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>;
+using Mod = S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Div>>;
 /*
  * Mod(a, b) = a % b
  *
- * S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>(5, 2)
- * LimitedSub(5, Product(2, 2))
+ * S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Div>>(5, 2)
+ * LimitedDifference(5, Product(2, 2))
  * 1
- * S<LimitedSub, U<2, 1>, S<Product, U<2, 2>, Div>>(2, 5)
- * LimitedSub(2, Product(2, 0))
+ * S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Div>>(2, 5)
+ * LimitedDifference(2, Product(2, 0))
  * 2
  */
 
@@ -321,16 +322,53 @@ using IsPrime = Duplicate<R<Z, S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S
  *           = Ternary(1, 1, Ternary(0, 0, 0))
  *           = 1
  * R<>(3, 3) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 2, 1)
- *           = Ternary(Equals(2, 1), 1, Ternary(Mod(3, 2), Product(1, 1), 0)
+ *           = Ternary(Equals(2, 1), 1, Ternary(Mod(3, 2), Product(1, 1), 0))
  *           = Ternary(0, 1, Ternary(1, 1, 0))
  *           = 1
  *
  *
  */
 
-using Plog = Z; // TODO
+using PlogR = R<S<Z, U<2, 1>>, S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>>;
+
+using Plog = S<LimitedDecrement, S<PlogR, U<2, 2>, U<2, 1>, U<2, 2>>>;
 /*
- * Idea: it takes two arguments: k, n; at each step we'll calculate k ^ n and see if n is divisible by k ^ n
+ * Plog(base, a) = {max p | a is divisible by base ^ p}
+ *
+ * S<LimitedDecrement, S<PlogR, U<2, 1>, U<2, 2>, U<2, 1>>>(72, 6)
+ * LimitedDecrement(R<>(72, 6, 72))
+ * R<>(72, 6, 0) = 0
+ * R<>(72, 6, 1) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 0, 0)
+ *               = Ternary(Equals(Mod(72, Power(6, 0)), 0), 1, 0)
+ *               = Ternary(1, 1, 0)
+ *               = 1
+ * R<>(72, 6, 2) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 1, 1)
+ *               = Ternary(Equals(Mod(72, Power(6, 1)), 0), 2, 1)
+ *               = Ternary(1, 2, 1)
+ *               = 2
+ * R<>(72, 6, 3) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 2, 2)
+ *               = Ternary(Equals(Mod(72, Power(6, 2)), 0), 3, 2)
+ *               = Ternary(1, 3, 2)
+ *               = 3
+ * R<>(72, 6, 4) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 3, 3)
+ *               = Ternary(Equals(Mod(72, Power(6, 3)), 0), 4, 3)
+ *               = Ternary(0, 4, 3)
+ *               = 3
+ * etc for 5, 6, ..., 72
+ */
+
+using IntermediateSqrt = Duplicate<R<Z, S<Ternary, S<LessOrEquals, S<Product, U<3, 3>, U<3, 3>>, U<3, 1>>, S<N, U<3, 3>>, U<3, 3>>>>;
+
+using Sqrt = S<Ternary, S<Less, Id, Two>, IntermediateSqrt, S<LimitedDecrement , IntermediateSqrt>>;
+/*
+ * Sqrt(a) = {max p | p * p <= a}
+ *
+ * R<>(9, 0) = 0
+ * R<>(9, 1) = Ternary(LessOrEquals(Product(1, 1), 9), 1, 0) = 1
+ * R<>(9, 2) = Ternary(LessOrEquals(Product(2, 2), 9), 2, 1) = 2
+ * R<>(9, 3) = Ternary(LessOrEquals(Product(3, 3), 9), 3, 2) = 3
+ * R<>(9, 4) = Ternary(LessOrEquals(Product(4, 4), 9), 4, 3) = 3
+ * etc for 5, 6, ..., 9
  */
 
 using BitAnd = Z; // TODO
@@ -340,11 +378,6 @@ using NthPrime = Z; // TODO
 using Pair = Z; // TODO; Pair is a bijective function: N0 x N0 -> N0
 using PairGetLeft = Z; // TODO; retrieves the left number 'a' from the Pair(a, b)
 using PairGetRight = Z; // TODO; retrieves the right number 'b' from the Pair(a, b)
-using Sqrt = Z; // TODO
-/*
- * Idea: to keep decreasing the potential answer until it becomes less than or equal to
- * the given number
- */
 
 using Nil = One;
 // Gödel number of an empty list
@@ -386,10 +419,10 @@ int main() {
     printPRF(LimitedDecrement(), "LimitedDecrement", NatArgs{12});
     printPRF(LimitedDecrement(), "LimitedDecrement", NatArgs{1});
     printPRF(LimitedDecrement(), "LimitedDecrement", NatArgs{0});
-    std::cout << "=== LimitedSub ===" << "\n";
-    printPRF(LimitedSub(), "LimitedSub", NatArgs{8, 6});
-    printPRF(LimitedSub(), "LimitedSub", NatArgs{8, 8});
-    printPRF(LimitedSub(), "LimitedSub", NatArgs{6, 8});
+    std::cout << "=== LimitedDifference ===" << "\n";
+    printPRF(LimitedDifference(), "LimitedDifference", NatArgs{8, 6});
+    printPRF(LimitedDifference(), "LimitedDifference", NatArgs{8, 8});
+    printPRF(LimitedDifference(), "LimitedDifference", NatArgs{6, 8});
     std::cout << "=== LessOrEquals ===" << "\n";
     printPRF(LessOrEquals(), "LessOrEquals", NatArgs{43, 12});
     printPRF(LessOrEquals(), "LessOrEquals", NatArgs{12, 12});
@@ -466,6 +499,23 @@ int main() {
     printPRF(IsPrime(), "IsPrime", NatArgs{9});
     printPRF(IsPrime(), "IsPrime", NatArgs{10});
     printPRF(IsPrime(), "IsPrime", NatArgs{11});
+    std::cout << "=== Plog ===" << "\n";
+    printPRF(Plog(), "Plog", NatArgs{6, 72});
+    printPRF(Plog(), "Plog", NatArgs{3, 17});
+    printPRF(Plog(), "Plog", NatArgs{3, 18});
+    printPRF(Plog(), "Plog", NatArgs{3, 19});
+    std::cout << "=== Sqrt ===" << "\n";
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{0});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{1});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{2});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{3});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{4});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{5});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{6});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{7});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{8});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{9});
+    printPRF(Sqrt(), "IntermediateSqrt", NatArgs{10});
 
     return 0;
 }

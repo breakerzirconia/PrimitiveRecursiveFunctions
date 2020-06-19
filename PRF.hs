@@ -12,7 +12,7 @@ module PRF
     , prfProduct
     , prfPower
     , prfLimitedDecrement
-    , prfLimitedSub
+    , prfLimitedDifference
     , prfLessOrEquals
     , prfLess
     , prfEquals
@@ -26,6 +26,8 @@ module PRF
     , prfDiv
     , prfMod
     , prfIsPrime
+    , prfPlog
+    , prfSqrt
     , godelNil
     , printPRF
     ) where
@@ -71,6 +73,7 @@ compute' (R f g) args
 -- utility functions
 self = P 1 1
 one = C S [Z]
+two = C S [one]
 nth :: Int -> PRF
 nth x
     | x < 0 = error $ "nth: argument is less than zero: <" ++ show x ++ ">"
@@ -84,9 +87,9 @@ prfSum = R self (C S [P 3 3])
 prfProduct = R Z (C prfSum [P 3 1, P 3 3])
 prfPower = R one (C prfProduct [P 3 1, P 3 3])
 prfLimitedDecrement = duplicate $ R Z (P 3 2)
-prfLimitedSub = R self (C prfLimitedDecrement [P 3 3])
-prfLessOrEquals = C (R one (C Z [P 3 1])) [P 2 1, prfLimitedSub]
-prfLess = C (R one (C Z [P 3 1])) [P 2 1, C prfLimitedSub [C S [P 2 1], P 2 2]]
+prfLimitedDifference = R self (C prfLimitedDecrement [P 3 3])
+prfLessOrEquals = C (R one (C Z [P 3 1])) [P 2 1, prfLimitedDifference]
+prfLess = C (R one (C Z [P 3 1])) [P 2 1, C prfLimitedDifference [C S [P 2 1], P 2 2]]
 prfEquals = C prfProduct [prfLessOrEquals, flip2 prfLessOrEquals]
 prfFactorial = duplicate $ R one (C prfProduct [C S [P 3 2], P 3 3])
 prfIf = R (P 2 2) (P 4 1)
@@ -96,10 +99,14 @@ prfAnd = C prfIf [C one [P 2 1], C Z [P 2 1], prfProduct]
 prfOr = C prfIf [C one [P 2 1], C Z [P 2 1], prfSum]
 prfNotEquals = C prfNot [prfEquals]
 prfXor = prfNotEquals
-prfDivDetermine = C prfTernary [C prfLess [C prfLimitedSub [P 4 1, C prfProduct [P 4 4, P 4 2]], P 4 2], P 4 4, C S [P 4 4]]
+prfDivDetermine = C prfTernary [C prfLess [C prfLimitedDifference [P 4 1, C prfProduct [P 4 4, P 4 2]], P 4 2], P 4 4, C S [P 4 4]]
 prfDiv = C (R (C Z [P 2 1]) prfDivDetermine) [P 2 1, P 2 2, P 2 1]
-prfMod = C prfLimitedSub [P 2 1, C prfProduct [P 2 2, prfDiv]]
+prfMod = C prfLimitedDifference [P 2 1, C prfProduct [P 2 2, prfDiv]]
 prfIsPrime = duplicate $ R Z (C prfTernary [C prfEquals [P 3 2, C one [P 3 1]], C one [P 3 1], C prfTernary [C prfMod [P 3 1, P 3 2], C prfProduct [C one [P 3 1], P 3 3], C Z [P 3 1]]])
+prfPlogR = R (C Z [P 2 1]) (C prfTernary [C prfEquals [C prfMod [P 4 1, C prfPower [P 4 2, P 4 4]], C Z [P 4 1]], C S [P 4 4], P 4 4])
+prfPlog = C prfLimitedDecrement [C prfPlogR [P 2 2, P 2 1, P 2 2]]
+prfIntermediateSqrt = duplicate $ R Z (C prfTernary [C prfLessOrEquals [C prfProduct [P 3 3, P 3 3], P 3 1], C S [P 3 3], P 3 3])
+prfSqrt = C prfTernary [C prfLess [self, two], prfIntermediateSqrt, C prfLimitedDecrement [prfIntermediateSqrt]]
 
 godelNil = one
 
@@ -134,10 +141,10 @@ main = do
     printPRF prfLimitedDecrement "LimitedDecrement" [12]
     printPRF prfLimitedDecrement "LimitedDecrement" [1]
     printPRF prfLimitedDecrement "LimitedDecrement" [0]
-    putStrLn $ "=== LimitedSub ==="
-    printPRF prfLimitedSub "LimitedSub" [8, 6]
-    printPRF prfLimitedSub "LimitedSub" [8, 8]
-    printPRF prfLimitedSub "LimitedSub" [6, 6]
+    putStrLn $ "=== LimitedDifference ==="
+    printPRF prfLimitedDifference "LimitedDifference" [8, 6]
+    printPRF prfLimitedDifference "LimitedDifference" [8, 8]
+    printPRF prfLimitedDifference "LimitedDifference" [6, 6]
     putStrLn $ "=== LessOrEquals ==="
     printPRF prfLessOrEquals "LessOrEquals" [43, 12]
     printPRF prfLessOrEquals "LessOrEquals" [12, 12]
@@ -214,3 +221,19 @@ main = do
     printPRF prfIsPrime "IsPrime" [9]
     printPRF prfIsPrime "IsPrime" [10]
     printPRF prfIsPrime "IsPrime" [11]
+    putStrLn $ "=== Plog ==="
+    printPRF prfPlog "Plog" [3, 17]
+    printPRF prfPlog "Plog" [3, 18]
+    printPRF prfPlog "Plog" [3, 19]
+    putStrLn $ "=== Sqrt ==="
+    printPRF prfSqrt "Sqrt" [0]
+    printPRF prfSqrt "Sqrt" [1]
+    printPRF prfSqrt "Sqrt" [2]
+    printPRF prfSqrt "Sqrt" [3]
+    printPRF prfSqrt "Sqrt" [4]
+    printPRF prfSqrt "Sqrt" [5]
+    printPRF prfSqrt "Sqrt" [6]
+    printPRF prfSqrt "Sqrt" [7]
+    printPRF prfSqrt "Sqrt" [8]
+    printPRF prfSqrt "Sqrt" [9]
+    printPRF prfSqrt "Sqrt" [10]
