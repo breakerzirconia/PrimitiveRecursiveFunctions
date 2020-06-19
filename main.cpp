@@ -275,7 +275,7 @@ using DivDetermine = S<Ternary, S<Less, S<LimitedDifference, U<4, 1>, S<Product,
  * Ternary(1, 2, 3)
  * 2
  *
- * etc.. same for 3, 4, 5
+ * etc... same for 3, 4, 5
  */
 
 using Div = S<R<S<Z, U<2, 1>>, DivDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>;
@@ -354,7 +354,7 @@ using Plog = S<LimitedDecrement, S<PlogR, U<2, 2>, U<2, 1>, U<2, 2>>>;
  *               = Ternary(Equals(Mod(72, Power(6, 3)), 0), 4, 3)
  *               = Ternary(0, 4, 3)
  *               = 3
- * etc for 5, 6, ..., 72
+ * etc... same for 5, 6, ..., 72
  */
 
 using IntermediateSqrt = Duplicate<R<Z, S<Ternary, S<LessOrEquals, S<Product, U<3, 3>, U<3, 3>>, U<3, 1>>, S<N, U<3, 3>>, U<3, 3>>>>;
@@ -368,7 +368,7 @@ using Sqrt = S<Ternary, S<Less, Id, Two>, IntermediateSqrt, S<LimitedDecrement ,
  * R<>(9, 2) = Ternary(LessOrEquals(Product(2, 2), 9), 2, 1) = 2
  * R<>(9, 3) = Ternary(LessOrEquals(Product(3, 3), 9), 3, 2) = 3
  * R<>(9, 4) = Ternary(LessOrEquals(Product(4, 4), 9), 4, 3) = 3
- * etc for 5, 6, ..., 9
+ * etc... same for 5, 6, ..., 9
  */
 
 using BitAnd = Z; // TODO
