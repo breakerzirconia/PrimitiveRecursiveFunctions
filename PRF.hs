@@ -5,6 +5,7 @@ module PRF
     , compute
     , self
     , one
+    , two
     , nth
     , flip2
     , duplicate
@@ -28,6 +29,7 @@ module PRF
     , prfIsPrime
     , prfPlog
     , prfSqrt
+    , prfPair
     , godelNil
     , godelHead
     , godelTail
@@ -109,6 +111,7 @@ prfPlogR = R (C Z [P 2 1]) (C prfTernary [C prfEquals [C prfModulo [P 4 1, C prf
 prfPlog = C prfLimitedDecrement [C prfPlogR [P 2 2, P 2 1, P 2 2]]
 prfIntermediateSqrt = duplicate $ R Z (C prfTernary [C prfLessOrEquals [C prfProduct [P 3 3, P 3 3], P 3 1], C S [P 3 3], P 3 3])
 prfSqrt = C prfTernary [C prfLess [self, two], prfIntermediateSqrt, C prfLimitedDecrement [prfIntermediateSqrt]]
+prfPair = C prfSum [C prfQuotient [C prfProduct [prfSum, C prfSum [prfSum, C one [P 2 1]]], C two [P 2 1]], P 2 2]
 
 godelNil = one
 godelHead = duplicate $ R Z (C prfTernary [C prfEquals [C prfModulo [P 3 1, C prfPower [C two [P 3 1], P 3 2]], C Z [P 3 1]], P 3 2, P 3 3])
@@ -241,6 +244,11 @@ main = do
     printPRF prfSqrt "Sqrt" [8]
     printPRF prfSqrt "Sqrt" [9]
     printPRF prfSqrt "Sqrt" [10]
+    putStrLn $ "=== Pair ==="
+    printPRF prfPair "Pair" [4, 5]
+    printPRF prfPair "Pair" [5, 4]
+    printPRF prfPair "Pair" [7, 2]
+    printPRF prfPair "Pair" [2, 7]
     putStrLn $ "=== Nil ==="
     printPRF godelNil "Nil" [12]
     putStrLn $ "=== Head ==="

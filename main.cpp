@@ -371,11 +371,17 @@ using Sqrt = S<Ternary, S<Less, Id, Two>, IntermediateSqrt, S<LimitedDecrement, 
  * etc... same for 5, 6, ..., 9
  */
 
+using Pair = S<Sum, S<Quotient, S<Product, Sum, S<Sum, Sum, S<One, U<2, 1>>>>, S<Two, U<2, 1>>>, U<2, 2>>;
+/*
+ * Pair is a !bijective! function: N0 x N0 -> N0, Pair(a, b) = (a + b) * (a + b + 1) / 2 + b
+ *
+ * Pair(47, 32) = 3192
+ */
+
 using BitAnd = Z; // TODO
 using BitXor = Z; // TODO
 using First = Z; // TODO
 using NthPrime = Z; // TODO
-using Pair = Z; // TODO; Pair is a bijective function: N0 x N0 -> N0
 using PairGetLeft = Z; // TODO; retrieves the left number 'a' from the Pair(a, b)
 using PairGetRight = Z; // TODO; retrieves the right number 'b' from the Pair(a, b)
 
@@ -534,6 +540,11 @@ int main() {
     printPRF(Sqrt(), "IntermediateSqrt", NatArgs{8});
     printPRF(Sqrt(), "IntermediateSqrt", NatArgs{9});
     printPRF(Sqrt(), "IntermediateSqrt", NatArgs{10});
+    std::cout << "=== Pair ===" << "\n";
+    printPRF(Pair(), "Pair", NatArgs{4, 5});
+    printPRF(Pair(), "Pair", NatArgs{5, 4});
+    printPRF(Pair(), "Pair", NatArgs{7, 2});
+    printPRF(Pair(), "Pair", NatArgs{2, 7});
     std::cout << "=== Nil ===" << "\n";
     printPRF(Nil(), "Nil", NatArgs{2718281828});
     std::cout << "=== Head ===" << "\n";
