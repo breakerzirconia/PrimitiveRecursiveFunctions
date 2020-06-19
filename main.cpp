@@ -246,7 +246,7 @@ using NotEquals = S<Not, Equals>;
 using Xor = NotEquals;
 // synonym to NotEquals, since its semantics mimic the latter
 
-using DivDetermine = S<Ternary, S<Less, S<LimitedDifference, U<4, 1>, S<Product, U<4, 4>, U<4, 2>>>, U<4, 2>>, U<4, 4>, S<N, U<4, 4>>>;
+using QuotDetermine = S<Ternary, S<Less, S<LimitedDifference, U<4, 1>, S<Product, U<4, 4>, U<4, 2>>>, U<4, 2>>, U<4, 4>, S<N, U<4, 4>>>;
 /*
  * S<Ternary, S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>, U<5, 4>, S<N, U<4, 4>>>(5, 2, 0, 0)
  * Ternary(S<Less, S<LimitedDifference, U<5, 1>, S<Product, U<5, 4>, U<5, 2>>>, U<5, 2>>(5, 2, 0, 0, 1), 0, 1)
@@ -278,58 +278,58 @@ using DivDetermine = S<Ternary, S<Less, S<LimitedDifference, U<4, 1>, S<Product,
  * etc... same for 3, 4, 5
  */
 
-using Div = S<R<S<Z, U<2, 1>>, DivDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>;
+using Quotient = S<R<S<Z, U<2, 1>>, QuotDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>;
 /*
- * Div(a, b) = floor(a / b)
+ * Quotient(a, b) = floor(a / b)
  *
- * S<R<S<Z, U<2, 1>>, DivDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>(5, 2)
- * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 0) = S<Z, U<2, 1>>(5, 2) = 0
- * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 1) =
- *     DivDetermine(5, 2, 0, 0, 1) = 1
- * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 2) =
- *     DivDetermine(5, 2, 1, 1, 1) = 2
- * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 3) =
- *     DivDetermine(5, 2, 2, 2, 1) = 2
- * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 4) =
- *     DivDetermine(5, 2, 3, 2, 1) = 2
- * R<S<Z, U<2, 1>>, DivDetermine>(5, 2, 5) =
- *     DivDetermine(5, 2, 3, 1, 1) = 2
+ * S<R<S<Z, U<2, 1>>, QuotDetermine>, U<2, 1>, U<2, 2>, U<2, 1>>(5, 2)
+ * R<S<Z, U<2, 1>>, QuotDetermine>(5, 2, 0) = S<Z, U<2, 1>>(5, 2) = 0
+ * R<S<Z, U<2, 1>>, QuotDetermine>(5, 2, 1) =
+ *     QuotDetermine(5, 2, 0, 0, 1) = 1
+ * R<S<Z, U<2, 1>>, QuotDetermine>(5, 2, 2) =
+ *     QuotDetermine(5, 2, 1, 1, 1) = 2
+ * R<S<Z, U<2, 1>>, QuotDetermine>(5, 2, 3) =
+ *     QuotDetermine(5, 2, 2, 2, 1) = 2
+ * R<S<Z, U<2, 1>>, QuotDetermine>(5, 2, 4) =
+ *     QuotDetermine(5, 2, 3, 2, 1) = 2
+ * R<S<Z, U<2, 1>>, QuotDetermine>(5, 2, 5) =
+ *     QuotDetermine(5, 2, 3, 1, 1) = 2
  */
 
-using Mod = S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Div>>;
+using Modulo = S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Quotient>>;
 /*
- * Mod(a, b) = a % b
+ * Modulo(a, b) = a % b
  *
- * S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Div>>(5, 2)
+ * S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Quotient>>(5, 2)
  * LimitedDifference(5, Product(2, 2))
  * 1
- * S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Div>>(2, 5)
+ * S<LimitedDifference, U<2, 1>, S<Product, U<2, 2>, Quotient>>(2, 5)
  * LimitedDifference(2, Product(2, 0))
  * 2
  */
 
-using IsPrime = Duplicate<R<Z, S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>>>;
+using IsPrime = Duplicate<R<Z, S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Modulo, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>>>;
 /*
  * IsPrime(a) = 1 if a is prime else 0
  *
  * R<>(3, 0) = 0
- * R<>(3, 1) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 0, 0)
- *           = Ternary(Equals(0, 1), 1, Ternary(Mod(3, 0), Product(1, 0), 0))
+ * R<>(3, 1) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Modulo, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 0, 0)
+ *           = Ternary(Equals(0, 1), 1, Ternary(Modulo(3, 0), Product(1, 0), 0))
  *           = Ternary(0, 1, Ternary(3, 0, 0))
  *           = 0
- * R<>(3, 2) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 1, 0)
- *           = Ternary(Equals(1, 1), 1, Ternary(Mod(3, 1), Product(1, 0), 0))
+ * R<>(3, 2) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Modulo, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 1, 0)
+ *           = Ternary(Equals(1, 1), 1, Ternary(Modulo(3, 1), Product(1, 0), 0))
  *           = Ternary(1, 1, Ternary(0, 0, 0))
  *           = 1
- * R<>(3, 3) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Mod, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 2, 1)
- *           = Ternary(Equals(2, 1), 1, Ternary(Mod(3, 2), Product(1, 1), 0))
+ * R<>(3, 3) = S<Ternary, S<Equals, U<3, 2>, S<One, U<3, 1>>>, S<One, U<3, 1>>, S<Ternary, S<Modulo, U<3, 1>, U<3, 2>>, S<Product, S<One, U<3, 1>>, U<3, 3>>, S<Z, U<3, 1>>>>(3, 2, 1)
+ *           = Ternary(Equals(2, 1), 1, Ternary(Modulo(3, 2), Product(1, 1), 0))
  *           = Ternary(0, 1, Ternary(1, 1, 0))
  *           = 1
  *
  *
  */
 
-using PlogR = R<S<Z, U<2, 1>>, S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>>;
+using PlogR = R<S<Z, U<2, 1>>, S<Ternary, S<Equals, S<Modulo, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>>;
 
 using Plog = S<LimitedDecrement, S<PlogR, U<2, 2>, U<2, 1>, U<2, 2>>>;
 /*
@@ -338,20 +338,20 @@ using Plog = S<LimitedDecrement, S<PlogR, U<2, 2>, U<2, 1>, U<2, 2>>>;
  * S<LimitedDecrement, S<PlogR, U<2, 1>, U<2, 2>, U<2, 1>>>(72, 6)
  * LimitedDecrement(R<>(72, 6, 72))
  * R<>(72, 6, 0) = 0
- * R<>(72, 6, 1) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 0, 0)
- *               = Ternary(Equals(Mod(72, Power(6, 0)), 0), 1, 0)
+ * R<>(72, 6, 1) = S<Ternary, S<Equals, S<Modulo, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 0, 0)
+ *               = Ternary(Equals(Modulo(72, Power(6, 0)), 0), 1, 0)
  *               = Ternary(1, 1, 0)
  *               = 1
- * R<>(72, 6, 2) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 1, 1)
- *               = Ternary(Equals(Mod(72, Power(6, 1)), 0), 2, 1)
+ * R<>(72, 6, 2) = S<Ternary, S<Equals, S<Modulo, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 1, 1)
+ *               = Ternary(Equals(Modulo(72, Power(6, 1)), 0), 2, 1)
  *               = Ternary(1, 2, 1)
  *               = 2
- * R<>(72, 6, 3) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 2, 2)
- *               = Ternary(Equals(Mod(72, Power(6, 2)), 0), 3, 2)
+ * R<>(72, 6, 3) = S<Ternary, S<Equals, S<Modulo, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 2, 2)
+ *               = Ternary(Equals(Modulo(72, Power(6, 2)), 0), 3, 2)
  *               = Ternary(1, 3, 2)
  *               = 3
- * R<>(72, 6, 4) = S<Ternary, S<Equals, S<Mod, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 3, 3)
- *               = Ternary(Equals(Mod(72, Power(6, 3)), 0), 4, 3)
+ * R<>(72, 6, 4) = S<Ternary, S<Equals, S<Modulo, U<4, 1>, S<Power, U<4, 2>, U<4, 4>>>, S<Z, U<4, 1>>>, S<N, U<4, 4>>, U<4, 4>>(72, 6, 3, 3)
+ *               = Ternary(Equals(Modulo(72, Power(6, 3)), 0), 4, 3)
  *               = Ternary(0, 4, 3)
  *               = 3
  * etc... same for 5, 6, ..., 72
@@ -359,7 +359,7 @@ using Plog = S<LimitedDecrement, S<PlogR, U<2, 2>, U<2, 1>, U<2, 2>>>;
 
 using IntermediateSqrt = Duplicate<R<Z, S<Ternary, S<LessOrEquals, S<Product, U<3, 3>, U<3, 3>>, U<3, 1>>, S<N, U<3, 3>>, U<3, 3>>>>;
 
-using Sqrt = S<Ternary, S<Less, Id, Two>, IntermediateSqrt, S<LimitedDecrement , IntermediateSqrt>>;
+using Sqrt = S<Ternary, S<Less, Id, Two>, IntermediateSqrt, S<LimitedDecrement, IntermediateSqrt>>;
 /*
  * Sqrt(a) = {max p | p * p <= a}
  *
@@ -380,7 +380,25 @@ using PairGetLeft = Z; // TODO; retrieves the left number 'a' from the Pair(a, b
 using PairGetRight = Z; // TODO; retrieves the right number 'b' from the Pair(a, b)
 
 using Nil = One;
-// Gödel number of an empty list
+// The Gödel number of an 'empty list'
+
+using Head = Duplicate<R<Z, S<Ternary, S<Equals, S<Modulo, U<3, 1>, S<Power, S<Two, U<3, 1>>, U<3, 2>>>, S<Z, U<3, 1>>>, U<3, 2>, U<3, 3>>>>;
+/*
+ * The power of 2 from the prime factorization of the given number
+ *
+ * R<>(12, 0) = 0
+ * R<>(12, 1) = Ternary(Equals(Modulo(12, Power(2, 1)), 0), 1, 0) = 1
+ * R<>(12, 2) = Ternary(Equals(Modulo(12, Power(2, 2)), 0), 2, 1) = 2
+ * R<>(12, 3) = Ternary(Equals(Modulo(12, Power(2, 3)), 0), 3, 2) = 2
+ * etc... same for 4, 5, ..., 12
+ */
+
+using Tail = S<Quotient, Id, S<Power, Two, Head>>;
+/*
+ * The result of diving the given number by 2 to the power of its 'head'
+ *
+ * Tail(12) = 12 / Head(12) = 12 / (2 ^ 2) = 3
+ */
 
 std::string listArgs(const NatArgs& args) {
     std::string result = "(";
@@ -466,28 +484,28 @@ int main() {
     printPRF(Xor(), "Xor", NatArgs{0, 1});
     printPRF(Xor(), "Xor", NatArgs{1, 0});
     printPRF(Xor(), "Xor", NatArgs{1, 1});
-    std::cout << "=== Div ===" << "\n";
-    printPRF(Div(), "Div", NatArgs{5, 2});
-    printPRF(Div(), "Div", NatArgs{2, 5});
-    printPRF(Div(), "Div", NatArgs{5, 5});
-    printPRF(Div(), "Div", NatArgs{49, 5});
-    printPRF(Div(), "Div", NatArgs{50, 5});
-    printPRF(Div(), "Div", NatArgs{51, 5});
-    printPRF(Div(), "Div", NatArgs{0, 5});
-    printPRF(Div(), "Div", NatArgs{5, 0});
-    printPRF(Div(), "Div", NatArgs{0, 0});
-    printPRF(Div(), "Div", NatArgs{3, 1});
-    std::cout << "=== Mod ===" << "\n";
-    printPRF(Mod(), "Mod", NatArgs{5, 2});
-    printPRF(Mod(), "Mod", NatArgs{2, 5});
-    printPRF(Mod(), "Mod", NatArgs{5, 5});
-    printPRF(Mod(), "Mod", NatArgs{49, 5});
-    printPRF(Mod(), "Mod", NatArgs{50, 5});
-    printPRF(Mod(), "Mod", NatArgs{51, 5});
-    printPRF(Mod(), "Mod", NatArgs{0, 5});
-    printPRF(Mod(), "Mod", NatArgs{5, 0});
-    printPRF(Mod(), "Mod", NatArgs{0, 0});
-    printPRF(Mod(), "Mod", NatArgs{3, 1});
+    std::cout << "=== Quotient ===" << "\n";
+    printPRF(Quotient(), "Quotient", NatArgs{5, 2});
+    printPRF(Quotient(), "Quotient", NatArgs{2, 5});
+    printPRF(Quotient(), "Quotient", NatArgs{5, 5});
+    printPRF(Quotient(), "Quotient", NatArgs{49, 5});
+    printPRF(Quotient(), "Quotient", NatArgs{50, 5});
+    printPRF(Quotient(), "Quotient", NatArgs{51, 5});
+    printPRF(Quotient(), "Quotient", NatArgs{0, 5});
+    printPRF(Quotient(), "Quotient", NatArgs{5, 0});
+    printPRF(Quotient(), "Quotient", NatArgs{0, 0});
+    printPRF(Quotient(), "Quotient", NatArgs{3, 1});
+    std::cout << "=== Modulo ===" << "\n";
+    printPRF(Modulo(), "Modulo", NatArgs{5, 2});
+    printPRF(Modulo(), "Modulo", NatArgs{2, 5});
+    printPRF(Modulo(), "Modulo", NatArgs{5, 5});
+    printPRF(Modulo(), "Modulo", NatArgs{49, 5});
+    printPRF(Modulo(), "Modulo", NatArgs{50, 5});
+    printPRF(Modulo(), "Modulo", NatArgs{51, 5});
+    printPRF(Modulo(), "Modulo", NatArgs{0, 5});
+    printPRF(Modulo(), "Modulo", NatArgs{5, 0});
+    printPRF(Modulo(), "Modulo", NatArgs{0, 0});
+    printPRF(Modulo(), "Modulo", NatArgs{3, 1});
     std::cout << "=== IsPrime ===" << "\n";
     printPRF(IsPrime(), "IsPrime", NatArgs{2});
     printPRF(IsPrime(), "IsPrime", NatArgs{3});
@@ -500,7 +518,7 @@ int main() {
     printPRF(IsPrime(), "IsPrime", NatArgs{10});
     printPRF(IsPrime(), "IsPrime", NatArgs{11});
     std::cout << "=== Plog ===" << "\n";
-    printPRF(Plog(), "Plog", NatArgs{6, 72});
+//    printPRF(Plog(), "Plog", NatArgs{6, 72});
     printPRF(Plog(), "Plog", NatArgs{3, 17});
     printPRF(Plog(), "Plog", NatArgs{3, 18});
     printPRF(Plog(), "Plog", NatArgs{3, 19});
@@ -516,6 +534,16 @@ int main() {
     printPRF(Sqrt(), "IntermediateSqrt", NatArgs{8});
     printPRF(Sqrt(), "IntermediateSqrt", NatArgs{9});
     printPRF(Sqrt(), "IntermediateSqrt", NatArgs{10});
+    std::cout << "=== Nil ===" << "\n";
+    printPRF(Nil(), "Nil", NatArgs{2718281828});
+    std::cout << "=== Head ===" << "\n";
+    printPRF(Head(), "Head", NatArgs{10});
+    printPRF(Head(), "Head", NatArgs{11});
+    printPRF(Head(), "Head", NatArgs{12});
+    std::cout << "=== Tail ===" << "\n";
+    printPRF(Tail(), "Tail", NatArgs{10});
+    printPRF(Tail(), "Tail", NatArgs{11});
+    printPRF(Tail(), "Tail", NatArgs{12});
 
     return 0;
 }

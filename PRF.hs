@@ -23,12 +23,14 @@ module PRF
     , prfOr
     , prfNotEquals
     , prfXor
-    , prfDiv
-    , prfMod
+    , prfQuotient
+    , prfModulo
     , prfIsPrime
     , prfPlog
     , prfSqrt
     , godelNil
+    , godelHead
+    , godelTail
     , printPRF
     ) where
 
@@ -99,16 +101,18 @@ prfAnd = C prfIf [C one [P 2 1], C Z [P 2 1], prfProduct]
 prfOr = C prfIf [C one [P 2 1], C Z [P 2 1], prfSum]
 prfNotEquals = C prfNot [prfEquals]
 prfXor = prfNotEquals
-prfDivDetermine = C prfTernary [C prfLess [C prfLimitedDifference [P 4 1, C prfProduct [P 4 4, P 4 2]], P 4 2], P 4 4, C S [P 4 4]]
-prfDiv = C (R (C Z [P 2 1]) prfDivDetermine) [P 2 1, P 2 2, P 2 1]
-prfMod = C prfLimitedDifference [P 2 1, C prfProduct [P 2 2, prfDiv]]
-prfIsPrime = duplicate $ R Z (C prfTernary [C prfEquals [P 3 2, C one [P 3 1]], C one [P 3 1], C prfTernary [C prfMod [P 3 1, P 3 2], C prfProduct [C one [P 3 1], P 3 3], C Z [P 3 1]]])
-prfPlogR = R (C Z [P 2 1]) (C prfTernary [C prfEquals [C prfMod [P 4 1, C prfPower [P 4 2, P 4 4]], C Z [P 4 1]], C S [P 4 4], P 4 4])
+prfQuotDetermine = C prfTernary [C prfLess [C prfLimitedDifference [P 4 1, C prfProduct [P 4 4, P 4 2]], P 4 2], P 4 4, C S [P 4 4]]
+prfQuotient = C (R (C Z [P 2 1]) prfQuotDetermine) [P 2 1, P 2 2, P 2 1]
+prfModulo = C prfLimitedDifference [P 2 1, C prfProduct [P 2 2, prfQuotient]]
+prfIsPrime = duplicate $ R Z (C prfTernary [C prfEquals [P 3 2, C one [P 3 1]], C one [P 3 1], C prfTernary [C prfModulo [P 3 1, P 3 2], C prfProduct [C one [P 3 1], P 3 3], C Z [P 3 1]]])
+prfPlogR = R (C Z [P 2 1]) (C prfTernary [C prfEquals [C prfModulo [P 4 1, C prfPower [P 4 2, P 4 4]], C Z [P 4 1]], C S [P 4 4], P 4 4])
 prfPlog = C prfLimitedDecrement [C prfPlogR [P 2 2, P 2 1, P 2 2]]
 prfIntermediateSqrt = duplicate $ R Z (C prfTernary [C prfLessOrEquals [C prfProduct [P 3 3, P 3 3], P 3 1], C S [P 3 3], P 3 3])
 prfSqrt = C prfTernary [C prfLess [self, two], prfIntermediateSqrt, C prfLimitedDecrement [prfIntermediateSqrt]]
 
 godelNil = one
+godelHead = duplicate $ R Z (C prfTernary [C prfEquals [C prfModulo [P 3 1, C prfPower [C two [P 3 1], P 3 2]], C Z [P 3 1]], P 3 2, P 3 3])
+godelTail = C prfQuotient [self, C prfPower [two, godelHead]]
 
 newline :: IO ()
 newline = putStrLn ""
@@ -188,28 +192,28 @@ main = do
     printPRF prfXor "Xor" [0, 1]
     printPRF prfXor "Xor" [1, 0]
     printPRF prfXor "Xor" [1, 1]
-    putStrLn $ "=== Div ==="
-    printPRF prfDiv "Div" [5, 2]
-    printPRF prfDiv "Div" [2, 5]
-    printPRF prfDiv "Div" [5, 5]
-    printPRF prfDiv "Div" [49, 5]
-    printPRF prfDiv "Div" [50, 5]
-    printPRF prfDiv "Div" [51, 5]
-    printPRF prfDiv "Div" [0, 5]
-    printPRF prfDiv "Div" [5, 0]
-    printPRF prfDiv "Div" [0, 0]
-    printPRF prfDiv "Div" [3, 1]
-    putStrLn $ "=== Mod ==="
-    printPRF prfMod "Mod" [5, 2]
-    printPRF prfMod "Mod" [2, 5]
-    printPRF prfMod "Mod" [5, 5]
-    printPRF prfMod "Mod" [49, 5]
-    printPRF prfMod "Mod" [50, 5]
-    printPRF prfMod "Mod" [51, 5]
-    printPRF prfMod "Mod" [0, 5]
-    printPRF prfMod "Mod" [5, 0]
-    printPRF prfMod "Mod" [0, 0]
-    printPRF prfMod "Mod" [3, 1]
+    putStrLn $ "=== Quotient ==="
+    printPRF prfQuotient "Quotient" [5, 2]
+    printPRF prfQuotient "Quotient" [2, 5]
+    printPRF prfQuotient "Quotient" [5, 5]
+    printPRF prfQuotient "Quotient" [49, 5]
+    printPRF prfQuotient "Quotient" [50, 5]
+    printPRF prfQuotient "Quotient" [51, 5]
+    printPRF prfQuotient "Quotient" [0, 5]
+    printPRF prfQuotient "Quotient" [5, 0]
+    printPRF prfQuotient "Quotient" [0, 0]
+    printPRF prfQuotient "Quotient" [3, 1]
+    putStrLn $ "=== Modulo ==="
+    printPRF prfModulo "Modulo" [5, 2]
+    printPRF prfModulo "Modulo" [2, 5]
+    printPRF prfModulo "Modulo" [5, 5]
+    printPRF prfModulo "Modulo" [49, 5]
+    printPRF prfModulo "Modulo" [50, 5]
+    printPRF prfModulo "Modulo" [51, 5]
+    printPRF prfModulo "Modulo" [0, 5]
+    printPRF prfModulo "Modulo" [5, 0]
+    printPRF prfModulo "Modulo" [0, 0]
+    printPRF prfModulo "Modulo" [3, 1]
     putStrLn $ "=== IsPrime ==="
     printPRF prfIsPrime "IsPrime" [2]
     printPRF prfIsPrime "IsPrime" [3]
@@ -237,3 +241,13 @@ main = do
     printPRF prfSqrt "Sqrt" [8]
     printPRF prfSqrt "Sqrt" [9]
     printPRF prfSqrt "Sqrt" [10]
+    putStrLn $ "=== Nil ==="
+    printPRF godelNil "Nil" [12]
+    putStrLn $ "=== Head ==="
+    printPRF godelHead "Head" [10]
+    printPRF godelHead "Head" [11]
+    printPRF godelHead "Head" [12]
+    putStrLn $ "=== Tail ==="
+    printPRF godelTail "Tail" [10]
+    printPRF godelTail "Tail" [11]
+    printPRF godelTail "Tail" [12]
